@@ -1,4 +1,5 @@
 const { Client, IntentsBitField } = require('discord.js');
+const { default: axios } = require('axios');
 require('dotenv').config()
 
 const client = new Client({
@@ -10,13 +11,19 @@ const client = new Client({
     ],
 });
 
+
 client.on('messageCreate', (msg) => {
     if (msg.author.bot) {
         return;
     }
     if (msg.content === '/joke') {
-        msg.reply('I run!!!!!! No jokes yet tho ):')
-    } 
+        axios.get("https://icanhazdadjoke.com",{
+            headers:{
+                "Accept":"text/plain"
+            }
+        }).then(data => msg.reply(data.data))
+        .catch(err => console.error(err))
+    }
 
 })
 
